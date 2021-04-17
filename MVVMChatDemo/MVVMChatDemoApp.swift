@@ -11,7 +11,15 @@ import SwiftUI
 struct MVVMChatDemoApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+           
+            let chatservice = MockChatService()
+            let viewModel = AnyViewModel(ChatListViewModel(chatService: chatservice))
+            ChatListView()
+                .environmentObject(viewModel)
+                .environmentObject(KeyboardObserver.shared)
+            
+            
+           // ContentView()
         }
     }
 }
