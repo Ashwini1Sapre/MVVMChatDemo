@@ -18,25 +18,39 @@ struct ChatDetailState {
 
 enum ChatDetailInput {
     case addMessage(String)
+   // case addMessage(String)
 }
 
 
 struct ChatDetailView: View {
     
-    @EnvironmentObject private var viewModel: AnyViewModel<ChatDetailState,ChatDetailInput>
+    
+    private let chat: Chat
+    
+    @EnvironmentObject private var store: Store<AppState,AppAction>
+    
+    
+    
+    
+
     @EnvironmentObject private var keyboardObserver: KeyboardObserver
     
     @State private var newMessage = ""
+    
+    init(chat: Chat) {
+        self.chat = chat
+    }
+    
+    
    
     
     var body: some View {
         VStack {
-            List(viewModel.message) {
-                message in
+            List(store.state.messages(in: chat)) { message in
                 
-                MessageView(message: message, isMine: self.viewModel.currentUser == message.sender)
+                MessageView(message: message, isMine: self.store.state.currentUser == message.sender)
+                
              
-                
             }
             
             .onTapGesture{
@@ -57,7 +71,7 @@ struct ChatDetailView: View {
                 
             }
             .padding(.bottom, keyboardObserver.height)
-            .navigationBarTitle(Text(viewModel.chat.title),
+            .navigationBarTitle(Text(chat.title),
                                 displayMode: .inline )
             .animation(.easeInOut)
             
@@ -65,9 +79,7 @@ struct ChatDetailView: View {
        
     }
     
-    
-    
-    
+  
     
 }
 
@@ -75,7 +87,11 @@ struct ChatDetailView: View {
 extension ChatDetailView {
     
     private func sendMessage() {
-        viewModel.trigger(.addMessage(newMessage))
+//        viewModel.trigger(.addMessage(newMessage))
+//        newMessage = ""
+        
+        
+        store.send(.chatDetail(.add(newMessage, to: chat)))
         newMessage = ""
         
     }
@@ -92,3 +108,9 @@ extension ChatDetailView {
     
     
 }
+
+//struct ChatDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        /*@START_MENU_TOKEN@*/Text("Hello, World!")/*@END_MENU_TOKEN@*/
+//    }
+//}

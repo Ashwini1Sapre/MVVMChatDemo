@@ -12,10 +12,13 @@ struct MVVMChatDemoApp: App {
     var body: some Scene {
         WindowGroup {
            
-            let chatservice = MockChatService()
-            let viewModel = AnyViewModel(ChatListViewModel(chatService: chatservice))
+//            let chatservice = MockChatService()
+//            let viewModel = AnyViewModel(ChatListViewModel(chatService: chatservice))
+//
+            let store = Store(initialState: AppState(), reducer: Reducer.appReducer())
+            
             ChatListView()
-                .environmentObject(viewModel)
+                .environmentObject(store)
                 .environmentObject(KeyboardObserver.shared)
             
             

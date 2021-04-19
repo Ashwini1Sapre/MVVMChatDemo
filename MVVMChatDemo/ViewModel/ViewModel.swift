@@ -20,6 +20,8 @@ extension AnyViewModel: Identifiable where State: Identifiable {
     var id: State.ID {
         state.id
     }
+ 
+  
 }
 
 @dynamicMemberLookup
@@ -27,7 +29,7 @@ extension AnyViewModel: Identifiable where State: Identifiable {
     private let wrappedObjectWillChange: () -> AnyPublisher<Void, Never>
     private let wrappedState: () -> State
     private let wrappedTrigger: (Input) -> Void
-
+ 
     var objectWillChange: AnyPublisher<Void, Never> {
         wrappedObjectWillChange()
     }

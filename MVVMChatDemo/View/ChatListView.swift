@@ -7,43 +7,39 @@
 
 import SwiftUI
 
-struct ChatListSate {
-    var chats: [AnyViewModel<ChatDetailState,ChatDetailInput>]
-    
-}
-extension ChatDetailState: Identifiable {
-    var id: Chat.ID
-    {
-        chat.id
-    }
-}
 
 struct ChatListView: View {
-    @EnvironmentObject var viewModel: AnyViewModel<ChatListSate, Never>
+   // @EnvironmentObject var viewModel: AnyViewModel<ChatListSate, Never>
+    
+    @EnvironmentObject private var store: Store<AppState, AppAction>
    
     var body: some View {
         NavigationView {
-            List(viewModel.chats)
+           // List(viewModel.chats)
+            List(store.state.chats)
                 {
                 viewModel in
                 NavigationLink(
-                    destination: ChatDetailView()
-                        .environmentObject(viewModel)) {
-                    ChatCell(chat: viewModel.state.chat)
+                    destination: ChatDetailView(chat: viewModel))
+                    {
+                     //   .environmentObject(viewModel)) {
+                    ChatCell(chat: viewModel)
                 }
               
             }
             .navigationTitle("Chats")
-            
-            
-            
-            
+        
         }
+    .onAppear {
+    
+    self.store.send(.chatList(.reload))
+    }
     }
 }
 
-struct ChatListView_Previews: PreviewProvider {
-    static var previews: some View {
-        ChatListView()
-    }
-}
+
+//struct ChatListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ChatListView()
+//    }
+//}
